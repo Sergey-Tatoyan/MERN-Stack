@@ -11,9 +11,9 @@ const User = (props) => (
         <td>{props.user.dateOfBirth}</td>
         <td>{props.user.profilePicture}</td>
         <td>
-            <Link to={"/user/update/" + props.record._id}>EditUser</Link> |
+            <Link to={"/user/update/" + props.user._id}>EditUser</Link> |
             <a
-                href="/user/delete"
+                href="/user/delete/"
                 onClick={() => {
                     props.deleteUser(props.user._id);
                 }}

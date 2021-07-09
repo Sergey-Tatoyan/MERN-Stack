@@ -75,7 +75,7 @@ export default class CreateUser extends Component {
         };
 
         axios
-            .post("http://localhost:3000/user/create", newUser)
+            .post("http://localhost:3000/user/create/", newUser)
             .then((res) => console.log(res.data));
 
         // We will empty the state after posting the data to the database

@@ -28,7 +28,7 @@ class EditeUser extends Component {
     // This will get the record based on the id from the database.
     componentDidMount() {
         axios
-            .get("http://localhost:3000/user" + this.props.match.params.id)
+            .get("http://localhost:3000/user/" + this.props.match.params.id)
             .then((response) => {
                 this.setState({
                     firstName: response.data.firstName,
@@ -102,16 +102,17 @@ class EditeUser extends Component {
             )
             .then((res) => console.log(res.data));
 
-        this.props.history.push("/users");
+        this.props.history.push("/users/");
     }
 
     // This following section will display the update-form that takes the input from the user to update the data.
     render() {
         return (
             <div>
-                <h3 align="center">Update User</h3>
-                <form onSubmit={this.onSubmit}>
-                    <div className="form-group">
+                <h3 className="d-flex justify-content-center">Update User</h3>
+                <form className="flex-column d-flex align-items-center "
+                    onSubmit={this.onSubmit}>
+                    <div className="form-group w-50">
                         <label>FirstName: </label>
                         <input
                             type="text"
@@ -120,7 +121,7 @@ class EditeUser extends Component {
                             onChange={this.onChangeUserFirstName}
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group w-50">
                         <label>LastName: </label>
                         <input
                             type="text"
@@ -129,7 +130,7 @@ class EditeUser extends Component {
                             onChange={this.onChangeUserLastName}
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group w-50">
                         <label>Position: </label>
                         <input
                             type="text"
@@ -138,7 +139,7 @@ class EditeUser extends Component {
                             onChange={this.onChangeUserPosition}
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group w-50">
                         <label>Gender: </label>
                         <input
                             type="text"
@@ -147,7 +148,7 @@ class EditeUser extends Component {
                             onChange={this.onChangeUserGender}
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group w-50">
                         <label>Date Of Birth: </label>
                         <input
                             type="date"
@@ -156,7 +157,7 @@ class EditeUser extends Component {
                             onChange={this.onChangeUserDateOfBirth}
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group w-50">
                         <Form.Group>
                             <Form.File id="exampleFormControlFile1" label="Choose ProfilePicture"
                                        value = {this.state.profilePicture}
@@ -166,11 +167,16 @@ class EditeUser extends Component {
 
                     <br />
 
-                    <div className="form-group">
+                    <div className="form-group d-flex justify-content-center w-50 mt-3">
                         <input
                             type="submit"
                             value="Update User"
                             className="btn btn-primary"
+                        />
+                        <input
+                        type="submit"
+                        value="Cancel"
+                        className="btn btn-info m-1"
                         />
                     </div>
                 </form>
