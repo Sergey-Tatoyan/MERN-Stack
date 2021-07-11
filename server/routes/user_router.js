@@ -30,7 +30,7 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-router.post('/user/create', upload.single('profilePicture'), UserCtrl.createUser)
+    router.post('/user/create',upload.single('profilePicture'), UserCtrl.createUser)
 router.post('/user/update/:id', UserCtrl.updateUser)
 router.delete('/user/delete/:id', UserCtrl.deleteUser)
 router.get('/user/:id', UserCtrl.getUserById)

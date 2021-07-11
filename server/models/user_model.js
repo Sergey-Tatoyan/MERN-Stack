@@ -8,7 +8,7 @@ const User = new Schema(
         position: {type: String, required: true},
         gender: {type: String, required: true},
         dateOfBirth: {type: Date, required: true},
-        profilePicture: {type: String, required: true},
+        profilePicture: {type: String},
     },
     {timestamps: true},
 )

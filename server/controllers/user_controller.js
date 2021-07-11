@@ -1,7 +1,7 @@
 const User = require('../models/user_model')
 const mongoose = require("mongoose");
 
-createUser = (req, res) => {
+createUser = async (req, res) => {
     const user = new User({
         _id: new mongoose.Types.ObjectId(),
         firstName: req.body.firstName,
@@ -9,152 +9,71 @@ createUser = (req, res) => {
         position: req.body.position,
         gender: req.body.gender,
         dateOfBirth: req.body.dateOfBirth,
-        profilePicture: req.file.path
+        profilePicture: req.file ? req.file.path : req.body.profilePicture
     });
-    user
-        .save()
-        .then(result => {
-            res.status(201).json({
-                message: "Created user successfully",
-                createdUser: {
-                    firstName: result.firstName,
-                    lastName: result.lastName,
-                    position: result.position,
-                    gender: result.gender,
-                    dateOfBirth: result.dateOfBirth,
-                    _id: result._id,
-                    request: {
-                        type: 'GET',
-                        url: "http://localhost:3000/user" + result._id
-                    }
-                }
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
+
+    try {
+        console.log(user.profilePicture)
+        console.log(req.body)
+        await user.save();
+        res.status(201).json(user)
+    } catch (e) {
+        res.status(400).json({message: e.message})
+    }
 }
 
 updateUser = (req, res) => {
     const id = req.params.id;
-    const updateOps = {};
-    for (const ops of req.body) {
-        updateOps[ops.propertyName] = ops.value;
-    }
-    User.findByIdAndUpdate({ _id: id }, { $set: updateOps })
-        .exec()
-        .then(result => {
-            res.status(200).json({
-                message: 'User updated',
-                request: {
-                    type: 'GET',
-                    url: 'http://localhost:3000/users/update' + id
-                }
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
-}
-
-deleteUser =  (req, res) => {
-    const id = req.params.id;
-    User.remove({ _id: id })
-        .exec()
-        .then(result => {
-            res.status(200).json({
-                message: 'User deleted',
-                request: {
-                    type: 'POST',
-                    url: 'http://localhost:3000/user/delete',
-                    body: { firstName: 'String',
-                            lastName: 'String',
-                            position: 'String',
-                            gender: 'String',
-                            dateOfBirth: 'Number' }
-
-                }
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
-}
-
-getUserById =  (req, res) => {
-    const id = req.params.id;
-    User.findById(id)
-        .select('firstName lastName position gender dateOfBirth  _id profilePicture')
-        .exec()
-        .then(doc => {
-            if (doc) {
+    try {
+        const updateOps = {};
+        for (const [ops] of Object.entries(req.body)) {
+            console.log(ops)
+            updateOps[ops.propName] = ops.value;
+        }
+        User.updateOne({_id: id}, {$set: updateOps})
+            .exec()
+            .then(result => {
                 res.status(200).json({
-                    user: doc,
+                    message: 'User updated',
                     request: {
                         type: 'GET',
-                        url: 'http://localhost:3000/user'
+                        url: 'http://localhost:3000/users/update' + id
                     }
                 });
-            } else {
-                res
-                    .status(404)
-                    .json({ message: "No valid entry found for User ID" });
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: err });
-        });
+            })
+    } catch(error){
+            res.status(500).json({message: error.message});
+        }
 }
 
-getUsers = (req, res) => {
-    User.find()
-        .select("firstName lastName position gender dateOfBirth  _id profilePicture")
-        .exec()
-        .then(docs => {
-            const response = {
-                count: docs.length,
-                users: docs.map(doc => {
-                    return {
-                        firstName: doc.firstName,
-                        lastName: doc.lastName,
-                        position: doc.position,
-                        gender: doc.gender,
-                        dateOfBirth: doc.dateOfBirth,
-                        profilePicture: doc.profilePicture,
-                        _id: doc._id,
-                        request: {
-                            type: "GET",
-                            url: "http://localhost:3000/users" + doc._id
-                        }
-                    };
-                })
-            };
-            //   if (docs.length >= 0) {
-            res.status(200).json(response);
-            //   } else {
-            //       res.status(404).json({
-            //           message: 'No entries found'
-            //       });
-            //   }
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
+deleteUser = async (req, res) => {
+    const id = req.params.id
+    try {
+        await (await User.findByIdAndDelete(id))
+        res.send("Successfully Deleted")
+    } catch (error) {
+        console.log(error);
+    }
 }
 
+getUserById = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const user = await User.findById(id);
+        res.status(200).json(user);
+        } catch (e) {
+    res.status(404).json({message: e.message})
+    }
+}
+
+getUsers = async (req, res) => {
+    try {
+        const allUsers = await User.find();
+        res.status(200).json(allUsers);
+    } catch (error) {
+        res.status(404).json({message: error.message})
+    }
+}
 module.exports = {
     createUser,
     updateUser,

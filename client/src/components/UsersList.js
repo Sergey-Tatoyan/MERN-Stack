@@ -1,70 +1,27 @@
-import React, { Component } from "react";
+import React, {useEffect, useState} from "react";
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import  DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
+import {Edit} from "@material-ui/icons";
+import EditUser from "./EditUser";
 
-const User = (props) => (
-    <tr>
-        <td>{props.user.firstName}</td>
-        <td>{props.user.lastName}</td>
-        <td>{props.user.position}</td>
-        <td>{props.user.gender}</td>
-        <td>{props.user.dateOfBirth}</td>
-        <td>{props.user.profilePicture}</td>
-        <td>
-            <Link to={"/user/update/" + props.user._id}>EditUser</Link> |
-            <a
-                href="/user/delete/"
-                onClick={() => {
-                    props.deleteUser(props.user._id);
-                }}
-            >
-                Delete User
-            </a>
-        </td>
-    </tr>
-);
+export default function UsersList() {
+    const [userList, setUserList] = useState([]);
 
-export default class UsersList extends Component {
-    constructor(props) {
-        super(props);
-        this.deleteUser = this.deleteUser.bind(this);
-        this.state = { users: [] };
+    const deleteUser = (id) =>{
+       axios.delete(`http://localhost:3000/user/delete/${id}`).then(() =>{
+           window.location.reload(false)
+       })
+        window.location.reload()
     }
 
-    componentDidMount() {
-        axios
-            .get("http://localhost:3000/users")
-            .then((response) => {
-                this.setState({ users: response.data });
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
+    useEffect(() =>{
+        axios.get("http://localhost:3000/users").then((res) =>{
+            setUserList( res.data)
+        })
+    }, [])
 
-    deleteUser(id) {
-        axios.delete("http://localhost:3000/user/delete/" + id).then((response) => {
-            console.log(response.data);
-        });
 
-        this.setState({
-            user: this.state.users.filter((el) => el._id !== id),
-        });
-    }
-
-    usersList() {
-        return this.state.users.map((currentUser) => {
-            return (
-                <User
-                    user={currentUser}
-                    deleteUser={this.deleteUser}
-                    key={currentUser._id}
-                />
-            );
-        });
-    }
-
-    render() {
         return (
             <div>
                 <h3 className="d-flex justify-content-center">Users List</h3>
@@ -77,11 +34,33 @@ export default class UsersList extends Component {
                         <th>Position</th>
                         <th>Gender</th>
                         <th>Date Of Birth</th>
+                        <th>Delete</th>
+                        <th>Edit</th>
                     </tr>
                     </thead>
-                    <tbody>{this.usersList}</tbody>
+                    <tbody>
+                    {userList.map((user, key) =>(
+                        <tr key = {key}>
+                            <th>
+                            <img src={`http://localhost:3000/${user.profilePicture}`} height="100" width="100" alt="img"/>
+                            </th>
+                            <th>{user.firstName}</th>
+                            <th>{user.lastName}</th>
+                            <th>{user.position}</th>
+                            <th>{user.gender}</th>
+                            <th>{user.dateOfBirth}</th>
+                            <th>
+                                <IconButton aria-label="delete"  color="secondary" onClick={() => deleteUser(user._id)}>
+                                <DeleteIcon />
+                            </IconButton></th>
+                            <th><IconButton aria-label="edit" color="primary" onClick={() => EditUser(user._id)}>
+                                <Edit />
+                            </IconButton></th>
+                        </tr>
+                    ))}
+
+                    </tbody>
                 </table>
             </div>
         );
-    }
 }
