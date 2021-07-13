@@ -1,10 +1,10 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route} from "react-router-dom";
 import Navbar from "./components/NavBar";
 import CreateUser from "./components/CreateUser";
 import UsersList from "./components/UsersList";
-import EditUser from "./components/EditUser";
 import {Redirect} from "react-router";
+import EditUser from "./components/EditUser"
 
 const App = () => {
     return (
@@ -16,7 +16,10 @@ const App = () => {
             <Route exact path="/users">
                 <UsersList />
             </Route>
-            <Route path="/user/update/:id" component={EditUser} />
+            <Route path="/user/update/:id">
+                <EditUser/>
+            </Route>
+            <Redirect from='/users/' to="/users/" />
             <Route path="/user/create" >
                     <CreateUser/>
             </Route>

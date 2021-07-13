@@ -3,16 +3,17 @@ import axios from 'axios';
 import  DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import {Edit} from "@material-ui/icons";
-import EditUser from "./EditUser";
+import {useHistory} from "react-router-dom";
 
 export default function UsersList() {
+    const history = useHistory();
     const [userList, setUserList] = useState([]);
 
     const deleteUser = (id) =>{
        axios.delete(`http://localhost:3000/user/delete/${id}`).then(() =>{
            window.location.reload(false)
        })
-        window.location.reload()
+        window.location.reload(true)
     }
 
     useEffect(() =>{
@@ -53,7 +54,7 @@ export default function UsersList() {
                                 <IconButton aria-label="delete"  color="secondary" onClick={() => deleteUser(user._id)}>
                                 <DeleteIcon />
                             </IconButton></th>
-                            <th><IconButton aria-label="edit" color="primary" onClick={() => EditUser(user._id)}>
+                            <th><IconButton aria-label="edit" color="primary" onClick={() => history.push(`/user/update/${user._id}`)}>
                                 <Edit />
                             </IconButton></th>
                         </tr>

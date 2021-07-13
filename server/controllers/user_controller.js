@@ -11,10 +11,9 @@ createUser = async (req, res) => {
         dateOfBirth: req.body.dateOfBirth,
         profilePicture: req.file ? req.file.path : req.body.profilePicture
     });
-
     try {
-        console.log(user.profilePicture)
-        console.log(req.body)
+        console.log(user)
+        console.log(req.body.file)
         await user.save();
         res.status(201).json(user)
     } catch (e) {
@@ -22,26 +21,22 @@ createUser = async (req, res) => {
     }
 }
 
-updateUser = (req, res) => {
+updateUser = async (req, res) => {
     const id = req.params.id;
+    console.log(req.firstName)
     try {
-        const updateOps = {};
-        for (const [ops] of Object.entries(req.body)) {
-            console.log(ops)
-            updateOps[ops.propName] = ops.value;
-        }
-        User.updateOne({_id: id}, {$set: updateOps})
-            .exec()
-            .then(result => {
-                res.status(200).json({
-                    message: 'User updated',
-                    request: {
-                        type: 'GET',
-                        url: 'http://localhost:3000/users/update' + id
-                    }
-                });
-            })
-    } catch(error){
+        await User.updateOne({ _id: id }, {
+            $set:{
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                position: req.body.position,
+                gender: req.body.gender,
+                dateOfBirth: req.body.dateOfBirth,
+                profilePicture: req.file ? req.file.path : req.body.profilePicture
+            }
+        });
+        res.status(200).json({message: 'User updated'})
+        } catch(error){
             res.status(500).json({message: error.message});
         }
 }
@@ -50,9 +45,9 @@ deleteUser = async (req, res) => {
     const id = req.params.id
     try {
         await (await User.findByIdAndDelete(id))
-        res.send("Successfully Deleted")
+        res.status(200).json({message: "User Deleted"})
     } catch (error) {
-        console.log(error);
+        res.json({message: error.message});
     }
 }
 

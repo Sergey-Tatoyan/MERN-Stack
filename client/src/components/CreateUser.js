@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import {Form}  from 'react-bootstrap';
+import {useHistory} from "react-router-dom";
+
 
 export default function CreateUser() {
+    const history = useHistory();
     const [user, setUser] = useState({
             firstName: "",
             lastName: "",
@@ -11,9 +15,12 @@ export default function CreateUser() {
             profilePicture: ""
     });
 
-
-const createUser = () => {
-        axios.post("http://localhost:3000/user/create/", user).then(() =>{
+    const onFileSubmit = () => {
+        axios.post("http://localhost:3000/user/create", user,{
+            header:{
+                "Content-Type":"Multipart/form-data"
+            }
+        }).then(() =>{
             window.location.reload(false)
         })
     };
@@ -22,6 +29,7 @@ const createUser = () => {
             <div style={{ marginTop: 20}}>
                 <h3 className="d-flex justify-content-center">Create New User</h3>
                 <form className="flex-column d-flex align-items-center "
+                      onSubmit={(e) => onFileSubmit(e)}
                     >
                     <div className="form-group w-50" >
                         <label>FirstName: </label>
@@ -79,30 +87,37 @@ const createUser = () => {
                         />
                     </div>
                     <div className="form-group w-50 mt-3">
-                        <label> Choose ProfilePicture</label>
-                        <input type="file" id="file"
-                               value = {user.profilePicture}
-                               onChange={(event) =>{
-                                   setUser({...user, profilePicture: event.target.value})
-                               }}
-                        />
+                        <Form.Group>
+                            <Form.File id="file" label="Choose ProfilePicture"
+                                       type ="file"
+                                       required
+                                       accept=".jpeg, .png, .jpg"
+                                       value = {user.profilePicture}
+                                       onChange={(event) =>{
+                                           setUser({...user, profilePicture: event.target.file})
+                                           console.log(event.target.files[0])
+                                           console.log(user)
+                                       }}
+                            />
+                        </Form.Group>
                     </div>
                     <div className="form-group d-flex justify-content-center w-50 mt-3">
                         <input
                             type="submit"
-                            value="Create User"
+                            value="Save"
                             className="btn btn-primary m-1"
-                            onClick={createUser}
+
                         />
                         <input
                             type="submit"
                             value="Cancel"
                             className="btn btn-info m-1"
+                            onClick={() => history.push("/users")}
                         />
 
                     </div>
 
                 </form>
             </div>
-        );
+        )
 }
