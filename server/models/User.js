@@ -1,5 +1,4 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const {Schema, model, ObjectId} = require('mongoose')
 
 const User = new Schema(
     {
@@ -8,9 +7,8 @@ const User = new Schema(
         position: {type: String, required: true},
         gender: {type: String, required: true},
         dateOfBirth: {type: Date, required: true},
-        profilePicture: {type: String},
+        profilePicture: {type:String, required: true}
     },
     {timestamps: true},
 )
-
-module.exports = mongoose.model('users', User)
+module.exports = model('users', User)

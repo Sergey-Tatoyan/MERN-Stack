@@ -1,7 +1,8 @@
-const User = require('../models/user_model')
+const User = require('../models/User')
 const mongoose = require("mongoose");
 
 createUser = async (req, res) => {
+
     const user = new User({
         _id: new mongoose.Types.ObjectId(),
         firstName: req.body.firstName,
@@ -9,11 +10,10 @@ createUser = async (req, res) => {
         position: req.body.position,
         gender: req.body.gender,
         dateOfBirth: req.body.dateOfBirth,
-        profilePicture: req.file ? req.file.path : req.body.profilePicture
+        profilePicture: req.file.path
     });
     try {
         console.log(user)
-        console.log(req.body.file)
         await user.save();
         res.status(201).json(user)
     } catch (e) {
@@ -21,9 +21,14 @@ createUser = async (req, res) => {
     }
 }
 
+uploadImage =(req) =>{
+    console.log(req.file)
+    let profilePicture = req.file
+        return profilePicture
+}
+
 updateUser = async (req, res) => {
     const id = req.params.id;
-    console.log(req.firstName)
     try {
         await User.updateOne({ _id: id }, {
             $set:{
@@ -32,7 +37,7 @@ updateUser = async (req, res) => {
                 position: req.body.position,
                 gender: req.body.gender,
                 dateOfBirth: req.body.dateOfBirth,
-                profilePicture: req.file ? req.file.path : req.body.profilePicture
+                profilePicture:req.file.path
             }
         });
         res.status(200).json({message: 'User updated'})
@@ -74,5 +79,6 @@ module.exports = {
     updateUser,
     deleteUser,
     getUsers,
-    getUserById
+    getUserById,
+    uploadImage
 }

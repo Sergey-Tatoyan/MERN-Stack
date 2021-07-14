@@ -8,134 +8,122 @@ export default function EditUser() {
     const {id} = useParams();
     const history = useHistory();
     const [userInfo, setUserInfo] = useState([]);
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [position, setPosition] = useState("");
+    const [gender, setGender] = useState("");
+    const [dateOfBirth, setDateOfBirth] = useState("");
+    const [selectedFile, setSelectedFile] = useState("");
 
     useEffect(() => {
         axios.get(`http://localhost:3000/user/${id}`).then((res) => {
             setUserInfo(res.data)
         })
-    }, [])
+    }, [id])
 
-    const [user, setUser] = useState({
-        firstName: userInfo.firstName,
-        lastName: userInfo.lastName,
-        position: userInfo.position,
-        gender: userInfo.gender,
-        dateOfBirth: userInfo.dateOfBirth,
-        profilePicture: userInfo.profilePicture
-    });
-    const onFileSubmit = () => {
-        axios.put(`http://localhost:3000/user/update/${id}`, user, {
+    const sendForm = React.useCallback(async () => {
+        const formData = new FormData();
+        formData.append("firstName", firstName)
+        formData.append("lastName", lastName)
+        formData.append("position", position)
+        formData.append("gender", gender)
+        formData.append("dateOfBirth", dateOfBirth)
+        formData.append("profilePicture", selectedFile)
+
+        await axios.put(`http://localhost:3000/user/update/${id}`, formData, {
             header: {
-                "Content-Type": "Multipart/form-data"
+                "Content-type": "Multipart/form-data"
             }
-        }).then(() => {
-            window.location.reload(false)
-        })
-    };
+        });
+    }, [id, firstName, lastName, position, gender, dateOfBirth, selectedFile])
+
 
     return (
         <Container fluid>
-        <Col>
-            <h3 className="d-flex justify-content-center">User Info</h3>
-        </Col>
+            <Col>
+                <h3 className="d-flex justify-content-center">User Info</h3>
+            </Col>
             <Row className="d-flex justify-content-center">
-            <Col  xs lg="2" >
-            <img src={`http://localhost:3000/${userInfo.profilePicture}`} height="200" width="200" alt="img"
-                 />
-            </Col>
-            <Col xs lg="6">
-            <form
-                  onSubmit={(e) => onFileSubmit(e)}
-            >
-                <div className="form-group w-50">
-                    <label>FirstName: </label>
-                    <input
-                           type="text"
-                           className="form-control"
-                           value={user.firstName}
-                           onChange={(event) => {
-                               !event.target.value ?
-                                   setUser({...user, firstName: userInfo.firstName})
-                                   : setUser({...user, firstName: event.target.value})
-                           }}
+                <Col xs lg="2">
+                    <img src={`http://localhost:3000/${userInfo.profilePicture}`} height="200" width="200" alt="img"
                     />
-                </div>
-                <div className="form-group w-50">
-                    <label>LastName: </label>
-                    <input
-                           type="text"
-                           className="form-control"
-                           value={user.lastName}
-                           onChange={(event) => {
-                               setUser({...user, lastName: event.target.value})
-                           }}
-                    />
-                </div>
-                <div className="form-group w-50">
-                    <label>Position: </label>
-                    <input
-                           type="text"
-                           className="form-control"
-                           value={user.position}
-                           onChange={(event) => {
-                               setUser({...user, position: event.target.value})
-                           }}
-                    />
-                </div>
-                <div className="form-group w-50">
-                    <label>Gender: </label>
-                    <input
-                           type="text"
-                           className="form-control"
-                           value={user.gender}
-                           onChange={(event) => {
-                               setUser({...user, gender: event.target.value})
-                           }}
-                    />
-                </div>
-                <div className="form-group w-50">
-                    <label>Date Of Birth: </label>
-                    <input
-                           type="Date"
-                           className="form-control"
-                           value={user.dateOfBirth}
-                           onChange={(event) => {
-                               setUser({...user, dateOfBirth: event.target.value})
-                           }}
-                    />
-                </div>
-                <div className="form-group w-50 mt-3">
-                    <Form.Group>
-                        <Form.File id="file" label="Choose ProfilePicture"
-                                   type="file"
-                                   accept=".jpeg, .png, .jpg"
-                                   defaultValue = {userInfo.profilePicture}
-                                   value={user.profilePicture}
-                                   onChange={(event) => {
-                                       setUser({...user, profilePicture: event.target.file})
-                                       console.log(event.target.files[0])
-                                       console.log(userInfo.profilePicture)
-                                   }}
-                        />
-                    </Form.Group>
-                </div>
-                <div className="form-group d-flex justify-content-center w-50 mt-3">
-                    <input
-                        type="submit"
-                        value="Save"
-                        className="btn btn-primary m-1"
-
-                    />
-                    <input
-                        type="submit"
-                        value="Cancel"
-                        className="btn btn-info m-1"
-                        onClick={() => history.push("/users")}
-                    />
-
-                </div>
-            </form>
-            </Col>
+                </Col>
+                <Col xs lg="6">
+                        <div className="form-group w-50">
+                            <label>FirstName: </label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                defaultValue={userInfo.firstName}
+                                onChange={(event) => {
+                                    setFirstName(event.target.value)
+                                }}
+                            />
+                        </div>
+                        <div className="form-group w-50">
+                            <label>LastName: </label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                defaultValue={userInfo.lastName}
+                                onChange={(event) => {
+                                    setLastName(event.target.value)
+                                }}
+                            />
+                        </div>
+                        <div className="form-group w-50">
+                            <label>Position: </label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                defaultValue={userInfo.position}
+                                onChange={(event) => {
+                                    setPosition(event.target.value)
+                                }}
+                            />
+                        </div>
+                        <div className="form-group w-50">
+                            <label>Gender: </label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                defaultValue={userInfo.gender}
+                                onChange={(event) => {
+                                    setGender(event.target.value)
+                                }}
+                            />
+                        </div>
+                        <div className="form-group w-50">
+                            <label>Date Of Birth: </label>
+                            <input
+                                type="Date"
+                                className="form-control"
+                                onChange={(event) => {
+                                    setDateOfBirth(event.target.value)
+                                }}
+                            />
+                        </div>
+                        <div className="form-group w-50 mt-3">
+                            <Form.Group>
+                                <Form.File id="file" label="Choose ProfilePicture"
+                                           type="file"
+                                           onChange={(event) => {
+                                               setSelectedFile(event.target.files[0])
+                                           }}
+                                />
+                            </Form.Group>
+                        </div>
+                        <div className="form-group d-flex justify-content-center w-50 mt-3">
+                            <button className="btn btn-primary m-1"
+                                    onClick={sendForm}>
+                                Save
+                            </button>
+                            <button className="btn btn-info m-1"
+                                    onClick={() => history.push("/users")}>
+                                Cancel
+                            </button>
+                        </div>
+                </Col>
             </Row>
         </Container>
     )
