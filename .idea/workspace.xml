@@ -2,6 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="72c8d4cf-f3af-4b56-9da2-0caa2f0356a6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/MERN-Stack.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/CreateUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/CreateUser.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/EditUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/EditUser.js" afterDir="false" />
@@ -24,6 +30,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -38,6 +45,7 @@
       <workItem from="1626278444723" duration="172000" />
       <workItem from="1626278835814" duration="41000" />
       <workItem from="1626279058118" duration="2987000" />
+      <workItem from="1626282890840" duration="5000" />
     </task>
     <servers />
   </component>
