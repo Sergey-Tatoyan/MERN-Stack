@@ -35,7 +35,8 @@ export default function EditUser() {
                 "Content-type": "Multipart/form-data"
             }
         });
-    }, [id, firstName, lastName, position, gender, dateOfBirth, selectedFile])
+        history.push("/users")
+    }, [history,id, firstName, lastName, position, gender, dateOfBirth, selectedFile])
 
 
     return (
@@ -56,6 +57,7 @@ export default function EditUser() {
                                 className="form-control"
                                 defaultValue={userInfo.firstName}
                                 onChange={(event) => {
+                                    event.preventDefault()
                                     setFirstName(event.target.value)
                                 }}
                             />
@@ -67,6 +69,7 @@ export default function EditUser() {
                                 className="form-control"
                                 defaultValue={userInfo.lastName}
                                 onChange={(event) => {
+                                    event.preventDefault()
                                     setLastName(event.target.value)
                                 }}
                             />
@@ -78,6 +81,7 @@ export default function EditUser() {
                                 className="form-control"
                                 defaultValue={userInfo.position}
                                 onChange={(event) => {
+                                    event.preventDefault()
                                     setPosition(event.target.value)
                                 }}
                             />
@@ -89,6 +93,7 @@ export default function EditUser() {
                                 className="form-control"
                                 defaultValue={userInfo.gender}
                                 onChange={(event) => {
+                                    event.preventDefault()
                                     setGender(event.target.value)
                                 }}
                             />
@@ -98,7 +103,9 @@ export default function EditUser() {
                             <input
                                 type="Date"
                                 className="form-control"
+                                defaultValue={userInfo.dateOfBirth}
                                 onChange={(event) => {
+                                    event.preventDefault()
                                     setDateOfBirth(event.target.value)
                                 }}
                             />
@@ -107,7 +114,9 @@ export default function EditUser() {
                             <Form.Group>
                                 <Form.File id="file" label="Choose ProfilePicture"
                                            type="file"
+                                           defaultValue ={userInfo.profilePicture}
                                            onChange={(event) => {
+                                               event.preventDefault()
                                                setSelectedFile(event.target.files[0])
                                            }}
                                 />

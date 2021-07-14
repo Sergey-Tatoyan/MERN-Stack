@@ -13,18 +13,11 @@ createUser = async (req, res) => {
         profilePicture: req.file.path
     });
     try {
-        console.log(user)
         await user.save();
         res.status(201).json(user)
     } catch (e) {
         res.status(400).json({message: e.message})
     }
-}
-
-uploadImage =(req) =>{
-    console.log(req.file)
-    let profilePicture = req.file
-        return profilePicture
 }
 
 updateUser = async (req, res) => {
@@ -79,6 +72,5 @@ module.exports = {
     updateUser,
     deleteUser,
     getUsers,
-    getUserById,
-    uploadImage
+    getUserById
 }

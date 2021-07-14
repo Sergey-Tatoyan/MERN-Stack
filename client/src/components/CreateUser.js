@@ -26,18 +26,21 @@ export default function CreateUser() {
                 header:{
                     "Content-type": "Multipart/form-data"
                 }
-            });
-        },[firstName,lastName,position,gender,dateOfBirth,selectedFile])
+            })
+                history.push("/users")
+        },[history,firstName,lastName,position,gender,dateOfBirth,selectedFile])
 
         return (
             <div style={{marginTop: 20}}>
                 <h3 className="d-flex justify-content-center">Create New User</h3>
+                <div className="flex-column d-flex align-items-center ">
                     <div className="form-group w-50" >
                         <label>FirstName: </label>
                         <input required
                                type="text"
                                className="form-control"
                                onChange={(event) => {
+                                   event.preventDefault()
                                    setFirstName( event.target.value)
                                }}
                         />
@@ -48,6 +51,7 @@ export default function CreateUser() {
                                type="text"
                                className="form-control"
                                onChange={(event) => {
+                                   event.preventDefault()
                                    setLastName(event.target.value)
                                }}
                         />
@@ -58,6 +62,7 @@ export default function CreateUser() {
                                type="text"
                                className="form-control"
                                onChange={(event) => {
+                                   event.preventDefault()
                                    setPosition(event.target.value)
                                }}
                         />
@@ -68,6 +73,7 @@ export default function CreateUser() {
                                type="text"
                                className="form-control"
                                onChange={(event) => {
+                                   event.preventDefault()
                                    setGender(event.target.value)
                                }}
                         />
@@ -78,6 +84,7 @@ export default function CreateUser() {
                                type="Date"
                                className="form-control"
                                onChange={(event) => {
+                                   event.preventDefault()
                                    setDateOfBirth(event.target.value)
                                }}
                         />
@@ -87,6 +94,7 @@ export default function CreateUser() {
                             <Form.File id="file" label="Choose ProfilePicture"
                                        type="file"
                                        onChange={(event) => {
+                                           event.preventDefault()
                                            setSelectedFile(event.target.files[0])
                                        }}
                             />
@@ -101,6 +109,8 @@ export default function CreateUser() {
                             Cancel
                         </button>
                     </div>
+
+                </div>
             </div>
         )
 }

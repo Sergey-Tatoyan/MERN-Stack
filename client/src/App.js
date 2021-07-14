@@ -3,7 +3,6 @@ import { Route} from "react-router-dom";
 import Navbar from "./components/NavBar";
 import CreateUser from "./components/CreateUser";
 import UsersList from "./components/UsersList";
-import {Redirect} from "react-router";
 import EditUser from "./components/EditUser"
 
 const App = () => {
@@ -19,11 +18,9 @@ const App = () => {
             <Route path="/user/update/:id">
                 <EditUser/>
             </Route>
-            <Redirect from='/users/' to="/users/" />
             <Route path="/user/create" >
                     <CreateUser/>
             </Route>
-            <Redirect from='/users/' to="/users/" />
         </div>
     );
 };
